@@ -104,3 +104,4 @@ class addressbook : public contract {
 
 EOSIO_ABI( addressbook, (upsert)(erase)(notify) )
 // a new comment
+// two new comments
