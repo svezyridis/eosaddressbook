@@ -103,3 +103,5 @@ class addressbook : public contract {
 };
 
 EOSIO_ABI( addressbook, (upsert)(erase)(notify) )
+    
+    //browser edit
