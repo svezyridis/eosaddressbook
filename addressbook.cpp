@@ -123,6 +123,10 @@ class addressbook : public contract {
 
 };
 
+<<<<<<< HEAD
 EOSIO_ABI( addressbook, (upsert)(erase)(notify)(print) )
 // a new comment
 // two new comments
+=======
+EOSIO_ABI( addressbook, (upsert)(erase)(notify) )
+>>>>>>> 7ba99772d0a86214253b2347cfbf79dbf766d429
