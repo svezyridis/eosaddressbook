@@ -1,5 +1,5 @@
 {
-    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Sun Oct  7 19:40:25 2018",
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT Mon Oct 22 00:05:51 2018",
     "version": "eosio::abi/1.0",
     "structs": [
         {
@@ -35,6 +35,10 @@
                     "type": "name"
                 },
                 {
+                    "name": "sec_key",
+                    "type": "uint64"
+                },
+                {
                     "name": "first_name",
                     "type": "string"
                 },
@@ -53,6 +57,16 @@
                 {
                     "name": "state",
                     "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "print",
+            "base": "",
+            "fields": [
+                {
+                    "name": "key",
+                    "type": "uint64"
                 }
             ]
         },
@@ -83,6 +97,10 @@
                 {
                     "name": "state",
                     "type": "string"
+                },
+                {
+                    "name": "sec_key",
+                    "type": "uint64"
                 }
             ]
         }
@@ -100,6 +118,11 @@
             "ricardian_contract": ""
         },
         {
+            "name": "print",
+            "type": "print",
+            "ricardian_contract": ""
+        },
+        {
             "name": "upsert",
             "type": "upsert",
             "ricardian_contract": ""
@@ -107,7 +130,7 @@
     ],
     "tables": [
         {
-            "name": "people",
+            "name": "person",
             "type": "person",
             "index_type": "i64",
             "key_names": [],

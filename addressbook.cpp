@@ -5,10 +5,23 @@
 
 using namespace eosio;
 
+
 class addressbook : public contract {
     public:
     using contract::contract;
     addressbook(account_name self): contract(self){}
+
+    [[eosio::action]]
+    void print(uint64_t key){
+        address_index addresses(_self, _self);
+        auto idx = addresses.get_index<N(sec_key)>();
+        auto itr = idx.lower_bound(key);
+        for(; (itr!=idx.end()&&itr->sec_key==key); itr++){
+            eosio::print("city= ",itr->city, " \n");
+        }
+        eosio::print("new line");
+
+    }
 
     [[eosio::action]]
     void upsert(account_name user,
@@ -16,7 +29,8 @@ class addressbook : public contract {
         std::string last_name,
         std::string street,
         std::string city,
-        std::string state
+        std::string state,
+        uint64_t sec_key
     ){
         require_auth(user);
         address_index addresses(_self, _self);
@@ -30,6 +44,7 @@ class addressbook : public contract {
                 row.street=street;
                 row.city=city;
                 row.state=state;
+                row.sec_key = sec_key;
             });
             send_summary(user, "successfully emplaced");
             increment_counter(user, "emplace");
@@ -43,6 +58,7 @@ class addressbook : public contract {
                 row.street=street;
                 row.city=city;
                 row.state=state;
+                row.sec_key=sec_key;
             });
             send_summary(user, "successfully modified");
             increment_counter(user, "modify");
@@ -70,15 +86,20 @@ class addressbook : public contract {
     private:
       struct [[eosio::table]] person {
         account_name key;
+        uint64_t sec_key;
         std::string first_name;
         std::string last_name;
         std::string street;
         std::string city;
         std::string state;
-        uint64_t primary_key() const {return key;}   
+        uint64_t primary_key() const {return key;}
+        uint64_t secondary_key() const {return sec_key;} 
+        EOSLIB_SERIALIZE(person, (key)(sec_key)(first_name)(last_name)(street)(city)(state))  
     };
 
-    typedef eosio::multi_index<N(people), person> address_index;
+    typedef eosio::multi_index<N(person), person, 
+        indexed_by<N(sec_key), const_mem_fun<person, uint64_t, &person::secondary_key>>
+        > address_index;
     void send_summary(account_name user, std::string message){
         action(
             permission_level(get_self(), N(active)),
@@ -102,6 +123,6 @@ class addressbook : public contract {
 
 };
 
-EOSIO_ABI( addressbook, (upsert)(erase)(notify) )
+EOSIO_ABI( addressbook, (upsert)(erase)(notify)(print) )
 // a new comment
 // two new comments
